@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row text-center" id="intro-section">
+        <h1>Player vs Computer Tic-Tac-Toe</h1>
+        <h2 class="message">Choose your player:</h2>
+        <form action="#">
+          <fieldset>
+            <input
+              type="radio"
+              name="player-choice"
+              id="player-choice-1"
+              value="X"
+            />
+            <label for="player-choice-1">X</label>
+            <input
+              type="radio"
+              name="player-choice"
+              id="player-choice-2"
+              value="O"
+            />
+            <label for="player-choice-2">O</label>
+          </fieldset>
+          <button id="reset">Reset</button>
+          <button id="play-again">Play Again</button>
+        </form>
+      </div>
+      <div class="row" id="grid-section">
+        <ul id="grid"></ul>
+      </div>
+      <div class="row text-center" id="score-section">
+        <b>Score:</b>
+        <div>
+          Player: <span id="player-score">0</span> - Computer:
+          <span id="computer-score">0</span>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
