@@ -151,30 +151,20 @@ html {
   }
   
   @media screen and (max-width: 992px) {
-    #play-again {
-      display: block;
-      margin-left: 10em;
-      margin-top: 1em;
-      background-color: #b73350;
-      color: #fff;
-      border: none;
-      padding: 4px 20px;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 16px;
+    @media screen and (max-width: 992px) {
+      #play-again,
+      #reset {
+        display: block;
+        margin: 1em auto; /* Center horizontally */
+        background-color: #b73350; /* Adjust background color if needed */
+        color: #fff;
+        border: none;
+        padding: 4px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+      }
     }
-  
-    #reset {
-      display: block;
-      margin-left: 10em;
-      margin-top: 1em;
-      background-color: #33B7A5;
-      color: #fff;
-      border: none;
-      padding: 4px 20px;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 16px;
-    }
+    
   }
   
