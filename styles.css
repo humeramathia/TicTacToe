@@ -28,18 +28,19 @@ html {
     text-align: center;
   }
 
- #play-again {
-  display: inline-block;
-  margin-top: 1em;
-  margin-left: 43em;
-  background-color: #33B7A5;
-  color: #fff;
-  border: none;
-  padding: 4px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-}
+  #play-again {
+    display: block; /* Change from inline-block to block */
+   margin-left: 690px; /* Set top/bottom margin to 0 and left/right margin to auto */
+    margin-top: 1em;
+    background-color: #33B7A5;
+    color: #fff;
+    border: none;
+    padding: 4px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
 
 #play-again:hover {
   background-color: #4C2F39;
