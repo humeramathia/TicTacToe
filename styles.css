@@ -153,7 +153,7 @@ html {
   @media screen and (max-width: 992px) {
     #play-again {
       display: block;
-      margin: 0 auto; /* Center horizontally */
+      margin-left: 10em;
       margin-top: 1em;
       background-color: #33B7A5;
       color: #fff;
@@ -166,7 +166,7 @@ html {
   
     #reset {
       display: block;
-      margin: 0 auto; /* Center horizontally */
+      margin-left: 10em;
       margin-top: 1em;
       background-color: #33B7A5;
       color: #fff;
