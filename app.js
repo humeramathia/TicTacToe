@@ -1,166 +1,350 @@
-var playerScore = 0;
-var computerScore = 0;
+/* 
+ * Current Issues
+ * -> How to best write HTML code in JS -> Template object with all HTML templates
+ * 
+ */
 
-var grid = document.getElementById('grid');
-var msg = document.querySelector('.message');
-var chooser = document.querySelector('form');
-var mark;
-var cells;
-
-var playAgainButton = document.getElementById('play-again');
-playAgainButton.style.display = 'none';
-
-var resetButton = document.getElementById('reset');
-resetButton.style.display = 'inline-block'; // Display reset button initially
-
-// add click listener to radio buttons
-function setPlayer() {
-  mark = this.value;
-  msg.textContent = mark + ', click on a square to make your move!';
-  chooser.classList.add('game-on');
-  this.checked = false;
-  buildGrid();
-  playAgainButton.style.display = 'inline-block';
-  resetButton.style.display = 'none';
+ // At every turn, we recreate playerOdd and playerEven with the correct attributes
+ function Player (agent, icon) {
+  this.agent = agent;
+  this.icon = icon;
 }
 
-// add click listener to each cell
-function playerMove() {
-  if (this.textContent == '') {
-    this.textContent = mark;
-    if (checkRow()) {
-      if (mark == 'X') {
-        playerScore++;
-      } else {
-        computerScore++;
-      }
-      updateScore();
-      return;
-    }
-    switchMark();
-    computerMove();
-  }
+// remove the 9 tiles and refactor
+// tiles: Array(9).fill(new Tile);
+
+function Tile (isTaken, text) {
+ this.isTaken = isTaken || false;
+ this.text = text || '';
 }
 
-// let the computer make the next move
-function computerMove() {
-  var emptyCells = [];
-  var random;
+/* 
+* 
+* Game Data
+* --> turn game object into a Function / Class
+*/
+var game = {
+ gameInProgress: false,
+ playerOdd: null,
+ playerEven: null,
+ currentPlayer: null,
+ winner: false,
+ tiles: [{
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }, {
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }, {
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }, {
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }, {
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }, {
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }, {
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }, {
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }, {
+   isTaken: false,
+   text: '' // 'x' or 'o'
+ }],
+ 
+ shouldGameContinue: function() {
+   let result = true;
+   icon = this.currentPlayer.icon;
+   
+   if (
+     // horizontal tiles
+     this.checkTiles(0, 1, 2, icon) ||
+     this.checkTiles(3, 4, 5, icon) ||
+     this.checkTiles(6, 7, 8, icon) ||
+     // vertical tiles
+     this.checkTiles(0, 3, 6, icon) ||
+     this.checkTiles(1, 4, 7, icon) ||
+     this.checkTiles(2, 5, 8, icon) ||
+     // diagonal tiles
+     this.checkTiles(0, 4, 8, icon) ||
+     this.checkTiles(2, 4, 6, icon)) {
+     result = false;
+     this.winner = true;
+     view.showWinner(icon);
+   } else if (game.tiles.every(tile => tile.isTaken === true) && this.winner === true) {
+     view.showWinner(icon);
+   } else  if (game.tiles.every(tile => tile.isTaken === true)) {
+     view.showWinner("Nobody ");
+   } 
+   this.gameInProgress = result;
+   return result;
+ },
 
-  cells.forEach(function(cell){
-    if (cell.textContent == '') {
-      emptyCells.push(cell);
-    }
-  });
-  
-  // computer marks a random EMPTY cell
-  random = Math.ceil(Math.random() * emptyCells.length) - 1;
-  emptyCells[random].textContent = mark;
-  if (checkRow()) {
-    if (mark == 'X') {
-      playerScore++;
-    } else {
-      computerScore++;
-    }
-    updateScore();
-    return;
-  }
-  switchMark();
-}
+ checkTiles: function(a, b, c, move) {
+   let result = false;
+   if (this.getTile(a) == move &&
+       this.getTile(b) == move &&
+       this.getTile(c) == move) {
+     result = true;
+   }
+   return result;
+ },
 
-// switch player mark
-function switchMark() {
-  if (mark == 'X') {
-    mark = 'O';
-  } else {
-    mark = 'X';
-  }
-}
+ getTile: function(number) {
+   return this.tiles[number].text;
+ },
+ 
+ shouldAIMove: function () {
+   if (this.currentPlayer.agent === "AI") {
+     // setTimeout removes / loses the context of "this"
+     setTimeout(this.AIMove.bind(this), 500);
+   }
+ },
+ 
+ AIMove: function () {
+     let choice = null;
+   
+     // function AItactics(selection, move, val) {
+     //   move.isTaken = true;
+     //   move.text = this.currentPlayer.icon;
+     //   view.XorYinTile(move.text, val);
+     //   selection = firstMove;
+     // }
+   
+     while (choice === null && this.shouldGameContinue()) {
+       let value = Math.floor(Math.random() * 9);
+       let tile = this.tiles[value];
+       let firstMove = this.tiles[4];
+       // refactor
+       if (!firstMove.isTaken) {
+         firstMove.isTaken = true;
+         firstMove.text = this.currentPlayer.icon;
+         view.XorYinTile(firstMove.text, 4);
+         choice = firstMove;
+         
+       } else if (!tile.isTaken) {
+         tile.isTaken = true;
+         tile.text    = this.currentPlayer.icon;
+         view.XorYinTile(this.currentPlayer.icon, value);
+         choice = tile;
+       }
+     }
+     this.switchTurn();
+ },
+ 
+ switchTurn: function() {
+   this.shouldGameContinue();
+   
+   if (this.currentPlayer === this.playerOdd) {
+     this.currentPlayer = this.playerEven;
+   } else {
+     this.currentPlayer = this.playerOdd;
+   }
+   
+   if (this.currentPlayer) {
+     view.setMessage("It's player " + game.currentPlayer.icon + "'s turn.");
+     this.shouldAIMove();
+   }
+ },
+ 
+};
 
-// determine a winner
-function winner(a, b, c) {
-  if (a.textContent == mark && b.textContent == mark && c.textContent == mark) {
-    msg.textContent = mark + ' is the winner!';
-    a.classList.add('winner');
-    b.classList.add('winner');
-    c.classList.add('winner');
-    return true;
-  } else {
-    return false;
-  }
-}
+/* 
+*
+* Event Handlers
+*
+*/
+var handlers = {
+ setStartingPlayer: function(event) {
+   game.playerOdd = new Player("Human", event.target.value);
+   game.currentPlayer = game.playerOdd;
+   game.gameInProgress  = true;
+   if (game.playerOdd.icon === 'X') {
+     game.playerEven = new Player('Human', 'O');
+   } else {
+     game.playerEven = new Player('Human', 'X');
+   }
+   
+   view.renderConfig(2);
+ },
 
-// check cell combinations 
-function checkRow() {
-  if (winner(document.getElementById('c1'), document.getElementById('c2'), document.getElementById('c3')) ||
-      winner(document.getElementById('c4'), document.getElementById('c5'), document.getElementById('c6')) ||
-      winner(document.getElementById('c7'), document.getElementById('c8'), document.getElementById('c9')) ||
-      winner(document.getElementById('c1'), document.getElementById('c4'), document.getElementById('c7')) ||
-      winner(document.getElementById('c2'), document.getElementById('c5'), document.getElementById('c8')) ||
-      winner(document.getElementById('c3'), document.getElementById('c6'), document.getElementById('c9')) ||
-      winner(document.getElementById('c1'), document.getElementById('c5'), document.getElementById('c9')) ||
-      winner(document.getElementById('c3'), document.getElementById('c5'), document.getElementById('c7'))) {
-    return true;
-  }
-  return false;
-}
+ setOpponent: function(event) {
+   game.playerEven = new Player(event.target.value, game.playerEven.icon); if ( game.playerOdd.icon === "X") {
+     game.playerEven.icon = "O";
+   } 
+   game.gameInProgress  = true;
+   view.renderConfig(3);
+ },
 
-// update the score display
-function updateScore() {
-  document.getElementById('player-score').textContent = playerScore;
-  document.getElementById('computer-score').textContent = computerScore;
-}
+ tileClick: function(event) {
+   if (!game.gameInProgress || game.currentPlayer.agent === 'AI') return;
+   
+   let clickedTileIndex = event.target.id,
+            clickedTile = game.tiles[clickedTileIndex];
+   
+   if (!clickedTile.isTaken) {
+     clickedTile.isTaken = true;
+     clickedTile.text    = game.currentPlayer.icon;
+     view.XorYinTile(game.currentPlayer.icon, clickedTileIndex);
+     game.switchTurn();
+     game.shouldGameContinue();
+   }
+ },
+ 
+ computerPlayerTurn: function() {
+     console.log(game.playerOdd, game.tiles);
+ }
+};
 
-// clear the grid and reset scores
-function resetGrid() {
-  mark = 'X';
-  cells.forEach(function(cell){
-    cell.textContent = '';
-    cell.classList.remove('winner');
-  });
-  msg.textContent = 'Choose your player:';
-  chooser.classList.remove('game-on');
-  grid.innerHTML = '';
-}
+/* 
+*
+* Game Templates
+*
+*/
 
-// build the grid
-function buildGrid() {
-  for (var i = 1; i <= 9; i++) {
-    var cell = document.createElement('li');
-    cell.id = 'c' + i;
-    cell.addEventListener('click', playerMove, false);
-    grid.appendChild(cell);
-  }
-  cells = Array.prototype.slice.call(grid.getElementsByTagName('li'));
-}
+var templates = {
+ playerButtonTemplate: function () {
+   return (
+     `<div id="pick-player">
+       <button onclick="handlers.setStartingPlayer(event)" class="player-select" value="X">X</button>
+       <button onclick="handlers.setStartingPlayer(event)" class="player-select" value="O">O</button>
+     </div>`
+   );
+ },
+ 
+ opponentButtonTemplate: function () {
+   return (
+     `<div id="pick-opponent">
+       <button onclick="handlers.setOpponent(event)" class="opponent-select" value="AI">AI</button>
+       <button onclick="handlers.setOpponent(event)" class="opponent-select" value="Human">HUMAN</button>
+     </div>`
+   );
+ },
+ 
+ restartButtonTemplate: function() {
+   let restartButton = document.createElement("button");
+   restartButton.setAttribute("onclick", "view.restartGame()");
+   restartButton.innerText = "Restart";
+   return restartButton;
+ },
+ 
+ renderTable() {
+   return (
+       `<tr>
+         <td class="tile" onclick="handlers.tileClick(event)" id="0"></td>
+         <td class="tile" onclick="handlers.tileClick(event)" id="1"></td>
+         <td class="tile" onclick="handlers.tileClick(event)" id="2"></td>
+       </tr>
+       <tr>
+         <td class="tile" onclick="handlers.tileClick(event)" id="3"></td>
+         <td class="tile" onclick="handlers.tileClick(event)" id="4"></td>
+         <td class="tile" onclick="handlers.tileClick(event)" id="5"></td>
+       </tr>
+       <tr>
+         <td class="tile" onclick="handlers.tileClick(event)" id="6"></td>
+         <td class="tile" onclick="handlers.tileClick(event)" id="7"></td>
+         <td class="tile" onclick="handlers.tileClick(event)" id="8"></td>
+       </tr>
+      `
+   )
+ }
+};
 
-var players = Array.prototype.slice.call(document.querySelectorAll('input[name=player-choice]'));
-players.forEach(function(choice){
-  choice.addEventListener('click', setPlayer, false);
+/* 
+*
+* Game View
+*
+*/
+
+var view = {
+ tictactoe:     document.getElementById('tictactoe'),
+ playerButtons: document.createElement('div'),
+ messageBox:    document.createElement('div'),
+ gameBoard:     document.createElement('table'),
+ configStep: 1,
+ 
+ setupBoard: function() {
+   this.renderConfig(1);
+   this.gameBoard.innerHTML = templates.renderTable();
+   
+   tictactoe.appendChild(this.gameBoard);
+   tictactoe.appendChild(this.messageBox);
+   tictactoe.appendChild(this.playerButtons);
+   tictactoe.appendChild(templates.restartButtonTemplate());
+ },
+ 
+ renderConfig: function (step) {
+   
+   this.configStep = step;
+   switch(view.configStep) {
+     case 1:
+       this.setMessage("Welcome, to begin please pick a player");
+       this.playerButtons.innerHTML = templates.playerButtonTemplate();
+       break;
+     case 2:
+       game.gameInProgress = false;
+       this.setMessage("Please pick an opponent");
+       this.playerButtons.innerHTML = templates.opponentButtonTemplate();
+       break;
+     case 3:
+       this.playerButtons.innerHTML = null;
+       this.setMessage("It's player " + game.currentPlayer.icon + "'s turn.");
+       break;
+     default:
+       // no opponent
+   }
+ },
+ 
+ showWinner: function(icon) {
+  var notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = icon + ' wins!';
+  document.body.appendChild(notification);
+
+  setTimeout(function() {
+      notification.remove();
+  }, 3000); // Adjust duration as needed
+
+  this.restartGame();
+},
+
+ XorYinTile: function(mark, index) {
+   document.getElementById(index).innerText = mark;
+   document.getElementById(index).classList.add("inactive");
+ },
+
+ setMessage: function(msg) {
+   this.messageBox.innerHTML = msg;
+ },
+ 
+ restartGame: function() {
+   let tiles = game.tiles;
+   game.gameInProgress = false;
+   game.playerOdd = null;
+   game.playerEven = null;
+   view.setMessage("Please select a player to start the game.");
+   game.winner = false;
+   
+   // Gameboard tiles
+   for (var i = 0; i < tiles.length; i++) {
+     tiles[i].isTaken = false;
+     tiles[i].text = '';
+     document.getElementById(i).innerText = '';
+     document.getElementById(i).classList.remove('inactive');
+   }
+   view.renderConfig(1);
+ }
+ 
+}; // end view
+
+// Start game here
+document.addEventListener("DOMContentLoaded", function() {
+ view.setupBoard();
+ console.log("game started");
 });
-
-var resetButton = document.getElementById('reset');
-var playAgainButton = document.getElementById('play-again');
-
-// Event listener for the "Play Again" button
-playAgainButton.addEventListener('click', function(e) {
-  e.preventDefault();
-  resetGrid();
-  playAgainButton.style.display = 'none';
-  resetButton.style.display = 'inline-block'
-  
-});
-
-// Event listener for the "Reset" button
-resetButton.addEventListener('click', function(e) {
-  e.preventDefault();
-  resetScores();
-});
-
-// Reset scores
-function resetScores() {
-  playerScore = 0;
-  computerScore = 0;
-  updateScore();
-}
-
