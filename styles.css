@@ -149,7 +149,7 @@ li {
 @media screen and (max-width: 768px) {
   #play-again,
   #reset {
-    display: block;
+    display: inline-block;
     margin-right: -800px; /* Center horizontally */
     background-color: #98b733; /* Adjust background color if needed */
     color: #fff;
