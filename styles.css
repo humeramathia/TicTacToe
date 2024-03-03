@@ -146,7 +146,7 @@ li {
   justify-content: center;
 }
 
-@media screen and (max-width: 200px) {
+@media screen and (max-width: 350px) {
   #play-again,
   #reset {
     display: block inline;
