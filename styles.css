@@ -154,7 +154,7 @@ html {
     @media screen and (max-width: 200px) {
       #play-again,
       #reset {
-        display: block;
+        display: block inline;
         margin-left: 20em;
         background-color: #b73350; /* Adjust background color if needed */
         color: #fff;
