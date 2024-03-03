@@ -126,7 +126,7 @@ footer {
 
 
 /* Media Queries */
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 575.98px) {
   .tile {
       font-size: 8vw; /* Adjust font size for smaller screens */
       height: 20vw; /* Adjust height for smaller screens */
