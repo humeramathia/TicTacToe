@@ -128,18 +128,24 @@ footer {
 /* Media Queries */
 @media screen and (max-width: 450px) {
   .tile {
-    font-size: 20px;
-    height: 80px;
-    width: 80px;
+      font-size: 8vw; /* Adjust font size for smaller screens */
+      height: 20vw; /* Adjust height for smaller screens */
+      width: 20vw; /* Adjust width for smaller screens */
   }
-  
+
   #tictactoe {
-    font-size: 20px;
-    margin: 0 auto;
-    width: 90%;
+      font-size: 8vw; /* Adjust font size for smaller screens */
+      margin: 0 auto;
+      width: 90%;
   }
-  
+
   .message-box {
-    padding: 2px;
+      padding: 2px;
+  }
+
+  .player-select,
+  .opponent-select,
+  button {
+      font-size: 6vw; /* Adjust font size for smaller screens */
   }
 }
