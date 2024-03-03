@@ -150,7 +150,18 @@ li {
   #play-again,
   #reset {
     display: inline-block;
-    margin-left: 10em; /* Center horizontally */
+    margin-left: 11em; /* Center horizontally */
+    background-color: #33b7a5; /* Adjust background color if needed */
+    color: #fff;
+    border: none;
+    padding: 4px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  #play-again{
+    display: inline-block;
+    margin-left: 12em; /* Center horizontally */
     background-color: #d0e87f; /* Adjust background color if needed */
     color: #fff;
     border: none;
