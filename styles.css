@@ -150,7 +150,7 @@ li {
   #play-again,
   #reset {
     display: block;
-    margin: 1em auto; /* Center horizontally */
+    margin: 3em auto; /* Center horizontally */
     background-color: #98b733; /* Adjust background color if needed */
     color: #fff;
     border: none;
