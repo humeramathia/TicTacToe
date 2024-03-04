@@ -3,9 +3,9 @@
 }
 
 html, body {
-  background: #a1d3ff; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #905d85 , #81126c); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to left, #ab76da , #a5a797); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #a1d3ff; 
+  background: -webkit-linear-gradient(to left, #905d85 , #81126c); 
+  background: linear-gradient(to left, #ab76da , #a5a797); 
   height: 100%;       
   font-family: 'Raleway', sans-serif;
   text-align: center;
@@ -47,12 +47,11 @@ td:hover {
   width: 80px;
 }
 
-/* Message Box */
 .message-box {
   margin: 10px auto;
 }
 
-/* Game state classes */
+
 .inactive {
   pointer-events: none;
 }
@@ -64,7 +63,7 @@ td:hover {
   transition: visibility 5s, opacity 0.5s linear;
 }
 
-/* Buttons */
+
 .player-select,
 .opponent-select {
   margin: 10px;
@@ -96,7 +95,7 @@ button:focus {
   outline: none;
 }
 
-/* Sticky Footer */
+
 footer {
   margin-top: 5%;
   padding: 10px;
